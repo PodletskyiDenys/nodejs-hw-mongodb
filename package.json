@@ -1,0 +1,35 @@
+{
+  "name": "nodejs-hw-mongodb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PodletskyiDenys/nodejs-hw-mongodb.git"
+  },
+  "keywords": [],
+  "author": "Denys Podletskyi <denus.podletskiy@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PodletskyiDenys/nodejs-hw-mongodb/issues"
+  },
+  "homepage": "https://github.com/PodletskyiDenys/nodejs-hw-mongodb#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mongoose": "^8.19.1",
+    "pino-http": "^11.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.38.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2"
+  }
+}
