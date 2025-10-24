@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import pinoHttp from 'pino-http';
+import pino from 'pino-http';
 
 import { getEnvVar } from './utils/getEnvVar.js';
 import { getAllContacts, getContactsById } from './services/contacts.js';
@@ -14,56 +14,44 @@ export function setupServer() {
   app.use(cors());
 
   app.use(
-    pinoHttp({
+    pino({
       transport: {
         target: 'pino-pretty',
-        options: {
-          colorize: true,
-          translateTime: 'SYS:standard',
-        },
       },
     }),
   );
 
-  app.get('/contacts', async (req, res, next) => {
-    try {
-      const contacts = await getAllContacts();
-      res.status(200).json({
-        status: 200,
-        message: 'Successfully found contacts!',
-        data: contacts,
-      });
-    } catch (err) {
-      next(err);
+  app.get('/contacts', async (req, res) => {
+    const contacts = await getAllContacts();
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully found contacts!',
+      data: contacts,
+    });
+  });
+
+  app.get('/contacts/:contactId', async (req, res) => {
+    const { contactId } = req.params;
+    const contact = await getContactsById(contactId);
+
+    if (!contact) {
+      res.status(404).json({ message: 'Contact not found' });
+      return;
     }
+
+    res.status(200).json({
+      status: 200,
+      message: `Successfully found contact with id ${contactId}!`,
+      data: contact,
+    });
   });
 
-  app.get('/contacts/:contactId', async (req, res, next) => {
-    try {
-      const { contactId } = req.params;
-      const contact = await getContactsById(contactId);
-
-      if (!contact) {
-        res.status(404).json({ message: 'Contact not found' });
-        return;
-      }
-
-      res.status(200).json({
-        status: 200,
-        message: `Successfully found contact with id ${contactId}!`,
-        data: contact,
-      });
-    } catch (err) {
-      next(err);
-    }
+  app.use((req, res, next) => {
+    res.status(404).json({
+      message: 'Not found',
+    });
   });
 
-  // 404 - Not Found
-  app.use((req, res) => {
-    res.status(404).json({ message: 'Not found' });
-  });
-
-  // 500 - Internal Server Error
   app.use((err, req, res, next) => {
     res.status(500).json({
       message: 'Something went wrong',
@@ -72,7 +60,9 @@ export function setupServer() {
   });
 
   app.listen(PORT, (error) => {
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
     console.log(`Server is running on port ${PORT}`);
   });
 }
