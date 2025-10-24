@@ -1,15 +1,23 @@
-import globals from 'globals';
-import pluginJs from '@eslint/js';
+import js from '@eslint/js';
+import prettier from 'eslint-config-prettier';
 
 export default [
-  pluginJs.configs.recommended,
+  js.configs.recommended,
+  prettier,
   {
-    files: ['src/**/*.js'],
-    languageOptions: { globals: globals.node },
+    languageOptions: {
+      ecmaVersion: 2021,
+      sourceType: 'module',
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+      },
+    },
     rules: {
-      semi: 'error',
-      'no-unused-vars': ['error', { args: 'none' }],
-      'no-undef': 'error',
+      'no-unused-vars': 'warn',
+      'no-console': 'off',
     },
   },
 ];

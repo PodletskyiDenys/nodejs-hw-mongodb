@@ -6,4 +6,4 @@ const bootstrap = async () => {
   setupServer();
 };
 
-bootstrap().catch((error) => console.log(error));
+bootstrap();
