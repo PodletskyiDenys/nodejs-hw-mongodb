@@ -10,19 +10,12 @@ export const setupServer = () => {
   const app = express();
 
   app.use(cors());
-  app.use(
-    pino({
-      transport: {
-        target: 'pino-pretty',
-      },
-    }),
-  );
+  app.use(pino());
   app.use(express.json());
 
   app.get('/contacts', async (req, res) => {
     try {
       const contacts = await getAllContacts();
-
       res.status(200).json({
         status: 200,
         message: 'Successfully found contacts!',
